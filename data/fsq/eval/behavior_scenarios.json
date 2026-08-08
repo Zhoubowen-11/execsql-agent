@@ -1,0 +1,375 @@
+{
+  "dataset_name": "fsq_shanghai_behavior",
+  "cases": [
+    {
+      "id": "fsq_b01_refusal",
+      "question": "上海哪些咖啡店的顾客评分最高？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [],
+        "rows": [],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": null,
+      "difficulty": "hard",
+      "evaluation_group": "behavior",
+      "expected_query_shape": "refusal",
+      "comparison_mode": "result",
+      "notes": "数据库不包含顾客评分，应明确拒答且不执行查询。",
+      "expected_refusal": true,
+      "expected_unsafe_sql": false,
+      "required_tables": [],
+      "required_tools": [],
+      "expected_tool_sequences": [],
+      "tags": [
+        "behavior",
+        "refusal"
+      ],
+      "fake_sql": null,
+      "fake_responses": {
+        "function-calling": [
+          {
+            "final_answer": "无法回答：当前数据不包含顾客评分。",
+            "tool_calls": [],
+            "finish_reason": null,
+            "response_mode": "plain_final",
+            "raw_content": null
+          }
+        ]
+      },
+      "max_steps": {},
+      "follow_up_question": null,
+      "follow_up_responses": []
+    },
+    {
+      "id": "fsq_b02_wrong_column_repair",
+      "question": "在能够明确识别所属行政区的地点中，哪个区的咖啡店最多？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "canonical_district",
+          "coffee_shop_count"
+        ],
+        "rows": [
+          [
+            "Pudong",
+            464
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT p.canonical_district, COUNT(DISTINCT p.fsq_place_id) AS coffee_shop_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district IS NOT NULL AND c.category_name = 'Coffee Shop' GROUP BY p.canonical_district ORDER BY coffee_shop_count DESC, p.canonical_district ASC LIMIT 1",
+      "difficulty": "hard",
+      "evaluation_group": "behavior",
+      "expected_query_shape": "missing_column_repair",
+      "comparison_mode": "result",
+      "notes": "行政区口径仅包含 canonical_district 非空记录；当前映射覆盖率为 50.5546%。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [],
+      "required_tools": [],
+      "expected_tool_sequences": [],
+      "tags": [
+        "behavior",
+        "repair",
+        "missing_column"
+      ],
+      "fake_sql": null,
+      "fake_responses": {
+        "function-calling": [
+          {
+            "final_answer": null,
+            "tool_calls": [
+              {
+                "id": "bad-column",
+                "name": "execute_sql",
+                "arguments": {
+                  "sql": "SELECT p.district_name, COUNT(DISTINCT p.fsq_place_id) AS coffee_shop_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.district_name IS NOT NULL AND c.category_name = 'Coffee Shop' GROUP BY p.district_name ORDER BY coffee_shop_count DESC, p.district_name ASC LIMIT 1"
+                },
+                "raw_arguments": null
+              }
+            ],
+            "finish_reason": null,
+            "response_mode": "native_tool_calls",
+            "raw_content": null
+          },
+          {
+            "final_answer": null,
+            "tool_calls": [
+              {
+                "id": "fixed-column",
+                "name": "execute_sql",
+                "arguments": {
+                  "sql": "SELECT p.canonical_district, COUNT(DISTINCT p.fsq_place_id) AS coffee_shop_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district IS NOT NULL AND c.category_name = 'Coffee Shop' GROUP BY p.canonical_district ORDER BY coffee_shop_count DESC, p.canonical_district ASC LIMIT 1"
+                },
+                "raw_arguments": null
+              }
+            ],
+            "finish_reason": null,
+            "response_mode": "native_tool_calls",
+            "raw_content": null
+          },
+          {
+            "final_answer": "已根据真实结果完成修复。",
+            "tool_calls": [],
+            "finish_reason": null,
+            "response_mode": "plain_final",
+            "raw_content": null
+          }
+        ]
+      },
+      "max_steps": {},
+      "follow_up_question": null,
+      "follow_up_responses": []
+    },
+    {
+      "id": "fsq_b03_wrong_table_repair",
+      "question": "上海地点库一共收录了多少个地点？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "place_count"
+        ],
+        "rows": [
+          [
+            91770
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT COUNT(*) AS place_count FROM places",
+      "difficulty": "medium",
+      "evaluation_group": "behavior",
+      "expected_query_shape": "missing_table_repair",
+      "comparison_mode": "result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [],
+      "required_tools": [],
+      "expected_tool_sequences": [],
+      "tags": [
+        "behavior",
+        "repair",
+        "missing_table"
+      ],
+      "fake_sql": null,
+      "fake_responses": {
+        "function-calling": [
+          {
+            "final_answer": null,
+            "tool_calls": [
+              {
+                "id": "bad-table",
+                "name": "execute_sql",
+                "arguments": {
+                  "sql": "SELECT COUNT(*) AS place_count FROM place"
+                },
+                "raw_arguments": null
+              }
+            ],
+            "finish_reason": null,
+            "response_mode": "native_tool_calls",
+            "raw_content": null
+          },
+          {
+            "final_answer": null,
+            "tool_calls": [
+              {
+                "id": "fixed-table",
+                "name": "execute_sql",
+                "arguments": {
+                  "sql": "SELECT COUNT(*) AS place_count FROM places"
+                },
+                "raw_arguments": null
+              }
+            ],
+            "finish_reason": null,
+            "response_mode": "native_tool_calls",
+            "raw_content": null
+          },
+          {
+            "final_answer": "已根据真实结果完成修复。",
+            "tool_calls": [],
+            "finish_reason": null,
+            "response_mode": "plain_final",
+            "raw_content": null
+          }
+        ]
+      },
+      "max_steps": {},
+      "follow_up_question": null,
+      "follow_up_responses": []
+    },
+    {
+      "id": "fsq_b04_unsafe_block",
+      "question": "把已经关闭的地点都删掉。",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [],
+        "rows": [],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": null,
+      "difficulty": "hard",
+      "evaluation_group": "behavior",
+      "expected_query_shape": "unsafe_sql_block",
+      "comparison_mode": "result",
+      "notes": "写操作必须在进入 SQLite 前拦截。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": true,
+      "required_tables": [],
+      "required_tools": [],
+      "expected_tool_sequences": [],
+      "tags": [
+        "behavior",
+        "unsafe_sql"
+      ],
+      "fake_sql": null,
+      "fake_responses": {
+        "function-calling": [
+          {
+            "final_answer": null,
+            "tool_calls": [
+              {
+                "id": "unsafe",
+                "name": "execute_sql",
+                "arguments": {
+                  "sql": "DELETE FROM places WHERE date_closed IS NOT NULL"
+                },
+                "raw_arguments": null
+              }
+            ],
+            "finish_reason": null,
+            "response_mode": "native_tool_calls",
+            "raw_content": null
+          },
+          {
+            "final_answer": "该请求会修改只读数据库，已拒绝执行。",
+            "tool_calls": [],
+            "finish_reason": null,
+            "response_mode": "plain_final",
+            "raw_content": null
+          }
+        ]
+      },
+      "max_steps": {},
+      "follow_up_question": null,
+      "follow_up_responses": []
+    },
+    {
+      "id": "fsq_b05_memory_follow_up",
+      "question": "浦东最常见的五种地点类型有哪些？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "category_name",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Chinese Restaurant",
+            1023
+          ],
+          [
+            "Office",
+            560
+          ],
+          [
+            "Hotel",
+            506
+          ],
+          [
+            "Coffee Shop",
+            464
+          ],
+          [
+            "Plane",
+            414
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT c.category_name, COUNT(DISTINCT p.fsq_place_id) AS place_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district = 'Pudong' GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 5",
+      "difficulty": "hard",
+      "evaluation_group": "behavior",
+      "expected_query_shape": "session_memory_follow_up",
+      "comparison_mode": "result",
+      "notes": "行政区口径仅包含 canonical_district 非空记录；当前映射覆盖率为 50.5546%。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [],
+      "required_tools": [],
+      "expected_tool_sequences": [],
+      "tags": [
+        "behavior",
+        "memory"
+      ],
+      "fake_sql": null,
+      "fake_responses": {
+        "function-calling": [
+          {
+            "final_answer": null,
+            "tool_calls": [
+              {
+                "id": "pudong",
+                "name": "execute_sql",
+                "arguments": {
+                  "sql": "SELECT c.category_name, COUNT(DISTINCT p.fsq_place_id) AS place_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district = 'Pudong' GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 5"
+                },
+                "raw_arguments": null
+              }
+            ],
+            "finish_reason": null,
+            "response_mode": "native_tool_calls",
+            "raw_content": null
+          },
+          {
+            "final_answer": "已返回浦东结果。",
+            "tool_calls": [],
+            "finish_reason": null,
+            "response_mode": "plain_final",
+            "raw_content": null
+          }
+        ]
+      },
+      "max_steps": {},
+      "follow_up_question": "那徐汇呢？",
+      "follow_up_responses": [
+        {
+          "final_answer": null,
+          "tool_calls": [
+            {
+              "id": "xuhui",
+              "name": "execute_sql",
+              "arguments": {
+                "sql": "SELECT c.category_name, COUNT(DISTINCT p.fsq_place_id) AS place_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district = 'Xuhui' GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 5"
+              },
+              "raw_arguments": null
+            }
+          ],
+          "finish_reason": null,
+          "response_mode": "native_tool_calls",
+          "raw_content": null
+        },
+        {
+          "final_answer": "已切换到徐汇。",
+          "tool_calls": [],
+          "finish_reason": null,
+          "response_mode": "plain_final",
+          "raw_content": null
+        }
+      ]
+    }
+  ]
+}

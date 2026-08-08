@@ -1,0 +1,61 @@
+{
+  "dataset_name": "fsq_shanghai_function_calling_sft_seed_v1",
+  "cases": [
+    {
+      "case_id": "sft_seed_001",
+      "failure_mode": "district_alias_mapping",
+      "question": "黄浦区里，留有联系电话的 Coffee Shop 一共有多少个地点？",
+      "inspect_tables": ["places", "place_categories", "categories"],
+      "sql": "SELECT COUNT(DISTINCT p.fsq_place_id) AS place_count\nFROM places p\nJOIN place_categories pc\n  ON pc.fsq_place_id = p.fsq_place_id\nJOIN categories c\n  ON c.category_id = pc.category_id\nWHERE p.canonical_district = 'Huangpu'\n  AND p.tel IS NOT NULL\n  AND TRIM(p.tel) <> ''\n  AND c.category_name = 'Coffee Shop'",
+      "answer": {
+        "kind": "scalar",
+        "template": "黄浦区留有联系电话的 Coffee Shop 共有 {place_count} 个地点。"
+      }
+    },
+    {
+      "case_id": "sft_seed_002",
+      "failure_mode": "null_and_blank_filtering",
+      "question": "静安区里，联系电话和网址都没有填写的地点有多少个？",
+      "inspect_tables": ["places"],
+      "sql": "SELECT COUNT(*) AS place_count\nFROM places\nWHERE canonical_district = 'Jing''an'\n  AND (tel IS NULL OR TRIM(tel) = '')\n  AND (website IS NULL OR TRIM(website) = '')",
+      "answer": {
+        "kind": "scalar",
+        "template": "静安区联系电话和网址都未填写的地点共有 {place_count} 个。"
+      }
+    },
+    {
+      "case_id": "sft_seed_003",
+      "failure_mode": "combined_conditions",
+      "question": "徐汇区里，同时留有电话和网站、并且没有关闭日期的地点共有多少个？",
+      "inspect_tables": ["places"],
+      "sql": "SELECT COUNT(*) AS place_count\nFROM places\nWHERE canonical_district = 'Xuhui'\n  AND tel IS NOT NULL\n  AND TRIM(tel) <> ''\n  AND website IS NOT NULL\n  AND TRIM(website) <> ''\n  AND (date_closed IS NULL OR TRIM(date_closed) = '')",
+      "answer": {
+        "kind": "scalar",
+        "template": "徐汇区同时留有电话和网站且没有关闭日期的地点共有 {place_count} 个。"
+      }
+    },
+    {
+      "case_id": "sft_seed_004",
+      "failure_mode": "stable_top_k",
+      "question": "只看能明确识别行政区的地点，网站覆盖率最高的前五个区是哪几个？覆盖率相同时按区名排序。",
+      "inspect_tables": ["places"],
+      "sql": "WITH district_stats AS (\n  SELECT\n    canonical_district,\n    COUNT(*) AS total_count,\n    SUM(CASE\n      WHEN website IS NOT NULL AND TRIM(website) <> '' THEN 1\n      ELSE 0\n    END) AS website_count\n  FROM places\n  WHERE canonical_district IS NOT NULL\n  GROUP BY canonical_district\n)\nSELECT\n  canonical_district,\n  website_count,\n  total_count,\n  ROUND(100.0 * website_count / total_count, 2) AS website_rate_pct\nFROM district_stats\nORDER BY (1.0 * website_count / total_count) DESC, canonical_district ASC\nLIMIT 5",
+      "answer": {
+        "kind": "rows",
+        "template": "网站覆盖率最高的五个行政区依次是：{rows}。",
+        "row_template": "{rank}. {canonical_district}（{website_rate_pct}%，{website_count}/{total_count}）"
+      }
+    },
+    {
+      "case_id": "sft_seed_005",
+      "failure_mode": "multi_category_having",
+      "question": "如果把至少关联两个分类的地点称为“多标签地点”，这样的地点一共有多少个？",
+      "inspect_tables": ["place_categories"],
+      "sql": "SELECT COUNT(*) AS place_count\nFROM (\n  SELECT fsq_place_id\n  FROM place_categories\n  GROUP BY fsq_place_id\n  HAVING COUNT(*) > 1\n) AS multi_category_places",
+      "answer": {
+        "kind": "scalar",
+        "template": "至少关联两个分类的“多标签地点”共有 {place_count} 个。"
+      }
+    }
+  ]
+}

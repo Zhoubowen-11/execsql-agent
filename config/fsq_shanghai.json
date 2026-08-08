@@ -1,0 +1,36 @@
+{
+  "dataset_name": "FSQ OS Places Shanghai 2026-07-09",
+  "database_path": "data/fsq/shanghai_places.db",
+  "domain_description": "A read-only Shanghai place directory containing place attributes, FSQ category hierarchy, place-category links, unresolved quality flags, and build metadata.",
+  "queryable_scope": [
+    "Place counts, names, contact availability, locations, coordinate ranges, creation, refresh and closure dates",
+    "Category distributions, rankings and comparisons across locality or region values",
+    "Places without categories and places linked to multiple categories",
+    "Unresolved data-quality flags and dataset build metadata"
+  ],
+  "table_relationships": [
+    "places.fsq_place_id -> place_categories.fsq_place_id",
+    "place_categories.category_id -> categories.category_id",
+    "Use places JOIN place_categories JOIN categories for category analysis",
+    "Use LEFT JOIN from places when uncategorized places must remain in the result"
+  ],
+  "value_notes": [
+    "Use places.canonical_district for comparisons across the 16 Shanghai districts; NULL means locality, region and admin_region did not identify one district unambiguously",
+    "locality, region and admin_region remain raw source values and may contain English, Chinese, case and administrative-level variants",
+    "place_categories.is_primary=1 means the first source array item and is inferred, not an official primary-category assertion",
+    "A coffee-shop request normally maps to categories.category_name = 'Coffee Shop'; inspect schema and values when the wording is ambiguous"
+  ],
+  "query_guidelines": [
+    "Use only read-only SQLite SELECT statements",
+    "Validate SQL before execution",
+    "Use deterministic ORDER BY for rankings and LIMIT for place lists",
+    "Prefer COUNT(DISTINCT places.fsq_place_id) when joins could duplicate places",
+    "Treat blank contact strings as missing as well as NULL"
+  ],
+  "unsupported_questions": [
+    "Real-time foot traffic, live opening status or navigation routes",
+    "Revenue, rent, user ratings, reviews, sentiment or future forecasts",
+    "Any business metric or attribute absent from the inspected SQLite schema"
+  ],
+  "default_result_limit": 100
+}

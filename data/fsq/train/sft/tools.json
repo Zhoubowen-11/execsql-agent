@@ -1,0 +1,78 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "inspect_schema",
+      "description": "Inspect all SQLite tables or selected table names.",
+      "parameters": {
+        "additionalProperties": false,
+        "description": "Arguments for optionally filtered schema inspection.",
+        "properties": {
+          "table_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Table Names"
+          }
+        },
+        "title": "InspectSchemaArguments",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "validate_sql",
+      "description": "Validate one read-only SQLite SELECT without returning rows.",
+      "parameters": {
+        "additionalProperties": false,
+        "description": "Arguments for static and compile-time SQL validation.",
+        "properties": {
+          "sql": {
+            "minLength": 1,
+            "title": "Sql",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sql"
+        ],
+        "title": "ValidateSQLArguments",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "execute_sql",
+      "description": "Execute one bounded read-only SQLite SELECT query.",
+      "parameters": {
+        "additionalProperties": false,
+        "description": "Arguments for bounded read-only SQL execution.",
+        "properties": {
+          "sql": {
+            "minLength": 1,
+            "title": "Sql",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sql"
+        ],
+        "title": "ExecuteSQLArguments",
+        "type": "object"
+      }
+    }
+  }
+]

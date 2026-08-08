@@ -1,0 +1,54 @@
+# Python caches and environments
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Packaging
+*.egg-info/
+build/
+dist/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Generated databases and run artifacts
+data/demo.db
+data/trajectories/*
+data/reports/*
+data/fsq/raw/
+data/fsq/staging/
+data/fsq/shanghai_places.db
+data/fsq/**/*.duckdb
+data/fsq/**/*.duckdb.wal
+data/fsq/**/*.tmp
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Training artifacts and temporary files
+artifacts/
+checkpoints/
+outputs/
+.pytest-tmp/
+pytest_tmp/
+*.bak
+data/fsq/eval/questions_holdout_v1.json
+*.bak
+data/fsq/eval/questions_holdout_v1.json
+
+# Local backup files
+*.bak
+
+# Private holdout evaluation set
+data/fsq/eval/questions_holdout_v1.json

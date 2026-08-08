@@ -1,0 +1,1926 @@
+{
+  "dataset_name": "fsq_shanghai_business",
+  "cases": [
+    {
+      "id": "fsq_s01",
+      "question": "上海地点库一共收录了多少个地点？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "place_count"
+        ],
+        "rows": [
+          [
+            91770
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT COUNT(*) AS place_count FROM places",
+      "difficulty": "easy",
+      "evaluation_group": "single_table",
+      "expected_query_shape": "scalar_count",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "single_table",
+        "easy"
+      ],
+      "fake_sql": "SELECT COUNT(*) AS place_count FROM places",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_s02",
+      "question": "有官方网站的地点有多少家？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "place_count"
+        ],
+        "rows": [
+          [
+            10451
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT COUNT(*) AS place_count FROM places WHERE website IS NOT NULL AND TRIM(website) <> ''",
+      "difficulty": "easy",
+      "evaluation_group": "single_table",
+      "expected_query_shape": "filtered_count",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "single_table",
+        "easy"
+      ],
+      "fake_sql": "SELECT COUNT(*) AS place_count FROM places WHERE website IS NOT NULL AND TRIM(website) <> ''",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_s03",
+      "question": "留下联系电话的地点有多少家？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "place_count"
+        ],
+        "rows": [
+          [
+            18139
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT COUNT(*) AS place_count FROM places WHERE tel IS NOT NULL AND TRIM(tel) <> ''",
+      "difficulty": "easy",
+      "evaluation_group": "single_table",
+      "expected_query_shape": "filtered_count",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "single_table",
+        "easy"
+      ],
+      "fake_sql": "SELECT COUNT(*) AS place_count FROM places WHERE tel IS NOT NULL AND TRIM(tel) <> ''",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_s04",
+      "question": "目前记录为已经关闭的地点有多少个？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "closed_place_count"
+        ],
+        "rows": [
+          [
+            5522
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT COUNT(*) AS closed_place_count FROM places WHERE date_closed IS NOT NULL",
+      "difficulty": "easy",
+      "evaluation_group": "single_table",
+      "expected_query_shape": "filtered_count",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "single_table",
+        "easy"
+      ],
+      "fake_sql": "SELECT COUNT(*) AS closed_place_count FROM places WHERE date_closed IS NOT NULL",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_s05",
+      "question": "这些地点覆盖的最西、最东、最南和最北坐标分别是多少？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "west",
+          "east",
+          "south",
+          "north"
+        ],
+        "rows": [
+          [
+            120.895815,
+            121.977995,
+            30.696284,
+            31.89192933242098
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT MIN(longitude) AS west, MAX(longitude) AS east, MIN(latitude) AS south, MAX(latitude) AS north FROM places",
+      "difficulty": "medium",
+      "evaluation_group": "single_table",
+      "expected_query_shape": "numeric_extrema",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "single_table",
+        "medium"
+      ],
+      "fake_sql": "SELECT MIN(longitude) AS west, MAX(longitude) AS east, MIN(latitude) AS south, MAX(latitude) AS north FROM places",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_s06",
+      "question": "数据库中最近一次地点更新时间是哪一天？这一天共有多少个地点被更新？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "latest_refresh_date",
+          "updated_place_count"
+        ],
+        "rows": [
+          [
+            "2026-07-08",
+            280
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT MAX(date_refreshed) AS latest_refresh_date, COUNT(*) AS updated_place_count FROM places WHERE date_refreshed = (SELECT MAX(date_refreshed) FROM places)",
+      "difficulty": "easy",
+      "evaluation_group": "single_table",
+      "expected_query_shape": "latest_date_count",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "single_table",
+        "easy"
+      ],
+      "fake_sql": "SELECT MAX(date_refreshed) AS latest_refresh_date, COUNT(*) AS updated_place_count FROM places WHERE date_refreshed = (SELECT MAX(date_refreshed) FROM places)",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_a01",
+      "question": "原始地点信息里，出现次数最多的十个区域名称是什么？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "locality",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Shanghai",
+            43270
+          ],
+          [
+            "Pudong",
+            14428
+          ],
+          [
+            "Changning",
+            9230
+          ],
+          [
+            "Xuhui",
+            8998
+          ],
+          [
+            "Huangpu",
+            7196
+          ],
+          [
+            "Minhang",
+            1581
+          ],
+          [
+            "Jing'an",
+            1075
+          ],
+          [
+            "Putuo",
+            760
+          ],
+          [
+            "Hongkou",
+            532
+          ],
+          [
+            "Yangpu",
+            499
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT locality, COUNT(*) AS place_count FROM places WHERE locality IS NOT NULL AND TRIM(locality) <> '' GROUP BY locality ORDER BY place_count DESC, locality ASC LIMIT 10",
+      "difficulty": "medium",
+      "evaluation_group": "aggregate_topk",
+      "expected_query_shape": "grouped_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": "这里展示原始区域名称，未合并语言和拼写变体。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "aggregate_topk",
+        "medium"
+      ],
+      "fake_sql": "SELECT locality, COUNT(*) AS place_count FROM places WHERE locality IS NOT NULL AND TRIM(locality) <> '' GROUP BY locality ORDER BY place_count DESC, locality ASC LIMIT 10",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_a02",
+      "question": "重名地点最多的十个名称是什么，各有多少个？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "name",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "星巴克",
+            518
+          ],
+          [
+            "FamilyMart 全家",
+            310
+          ],
+          [
+            "McDonald's (麦当劳)",
+            252
+          ],
+          [
+            "Starbucks (星巴克)",
+            233
+          ],
+          [
+            "Manner Coffee",
+            203
+          ],
+          [
+            "LAWSON 罗森",
+            202
+          ],
+          [
+            "Industrial and Commercial Bank of China (ICBC) 中国工商银行",
+            164
+          ],
+          [
+            "KFC (肯德基)",
+            150
+          ],
+          [
+            "85°C Bakery Café (85度C)",
+            119
+          ],
+          [
+            "Costa Coffee 咖世家",
+            103
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT name, COUNT(*) AS place_count FROM places WHERE name IS NOT NULL AND TRIM(name) <> '' GROUP BY name HAVING COUNT(*) > 1 ORDER BY place_count DESC, name ASC LIMIT 10",
+      "difficulty": "medium",
+      "evaluation_group": "aggregate_topk",
+      "expected_query_shape": "grouped_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "aggregate_topk",
+        "medium"
+      ],
+      "fake_sql": "SELECT name, COUNT(*) AS place_count FROM places WHERE name IS NOT NULL AND TRIM(name) <> '' GROUP BY name HAVING COUNT(*) > 1 ORDER BY place_count DESC, name ASC LIMIT 10",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_a03",
+      "question": "地点最集中的十个邮政编码是哪些？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "postcode",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "200000",
+            18477
+          ],
+          [
+            "200120",
+            982
+          ],
+          [
+            "200030",
+            763
+          ],
+          [
+            "200031",
+            682
+          ],
+          [
+            "200051",
+            638
+          ],
+          [
+            "200040",
+            586
+          ],
+          [
+            "200021",
+            486
+          ],
+          [
+            "200085",
+            478
+          ],
+          [
+            "200025",
+            385
+          ],
+          [
+            "200062",
+            343
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT postcode, COUNT(*) AS place_count FROM places WHERE postcode IS NOT NULL AND TRIM(postcode) <> '' GROUP BY postcode ORDER BY place_count DESC, postcode ASC LIMIT 10",
+      "difficulty": "medium",
+      "evaluation_group": "aggregate_topk",
+      "expected_query_shape": "grouped_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "aggregate_topk",
+        "medium"
+      ],
+      "fake_sql": "SELECT postcode, COUNT(*) AS place_count FROM places WHERE postcode IS NOT NULL AND TRIM(postcode) <> '' GROUP BY postcode ORDER BY place_count DESC, postcode ASC LIMIT 10",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_a04",
+      "question": "按创建年份看，哪五年新增的地点最多？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "created_year",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "2012",
+            12077
+          ],
+          [
+            "2011",
+            11696
+          ],
+          [
+            "2013",
+            9817
+          ],
+          [
+            "2010",
+            8756
+          ],
+          [
+            "2016",
+            5777
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT SUBSTR(date_created, 1, 4) AS created_year, COUNT(*) AS place_count FROM places WHERE date_created IS NOT NULL GROUP BY created_year ORDER BY place_count DESC, created_year ASC LIMIT 5",
+      "difficulty": "medium",
+      "evaluation_group": "aggregate_topk",
+      "expected_query_shape": "date_grouped_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "aggregate_topk",
+        "medium"
+      ],
+      "fake_sql": "SELECT SUBSTR(date_created, 1, 4) AS created_year, COUNT(*) AS place_count FROM places WHERE date_created IS NOT NULL GROUP BY created_year ORDER BY place_count DESC, created_year ASC LIMIT 5",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_a05",
+      "question": "按最近更新时间看，记录量最多的五个年份是哪几年？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "refreshed_year",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "2025",
+            15009
+          ],
+          [
+            "2019",
+            14740
+          ],
+          [
+            "2026",
+            13663
+          ],
+          [
+            "2018",
+            11626
+          ],
+          [
+            "2017",
+            7809
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT SUBSTR(date_refreshed, 1, 4) AS refreshed_year, COUNT(*) AS place_count FROM places WHERE date_refreshed IS NOT NULL GROUP BY refreshed_year ORDER BY place_count DESC, refreshed_year ASC LIMIT 5",
+      "difficulty": "medium",
+      "evaluation_group": "aggregate_topk",
+      "expected_query_shape": "date_grouped_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "aggregate_topk",
+        "medium"
+      ],
+      "fake_sql": "SELECT SUBSTR(date_refreshed, 1, 4) AS refreshed_year, COUNT(*) AS place_count FROM places WHERE date_refreshed IS NOT NULL GROUP BY refreshed_year ORDER BY place_count DESC, refreshed_year ASC LIMIT 5",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_a06",
+      "question": "已经关闭的地点主要集中在哪五个关闭年份？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "closed_year",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "2025",
+            2241
+          ],
+          [
+            "2018",
+            418
+          ],
+          [
+            "2017",
+            410
+          ],
+          [
+            "2026",
+            374
+          ],
+          [
+            "2019",
+            344
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT SUBSTR(date_closed, 1, 4) AS closed_year, COUNT(*) AS place_count FROM places WHERE date_closed IS NOT NULL GROUP BY closed_year ORDER BY place_count DESC, closed_year ASC LIMIT 5",
+      "difficulty": "medium",
+      "evaluation_group": "aggregate_topk",
+      "expected_query_shape": "date_grouped_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "aggregate_topk",
+        "medium"
+      ],
+      "fake_sql": "SELECT SUBSTR(date_closed, 1, 4) AS closed_year, COUNT(*) AS place_count FROM places WHERE date_closed IS NOT NULL GROUP BY closed_year ORDER BY place_count DESC, closed_year ASC LIMIT 5",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_a07",
+      "question": "同时留有官网和电话、只留一种联系方式、两种都没留的地点各有多少？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "contact_status",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "both",
+            6929
+          ],
+          [
+            "one",
+            14732
+          ],
+          [
+            "neither",
+            70109
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT CASE WHEN website IS NOT NULL AND TRIM(website) <> '' AND tel IS NOT NULL AND TRIM(tel) <> '' THEN 'both' WHEN (website IS NOT NULL AND TRIM(website) <> '') OR (tel IS NOT NULL AND TRIM(tel) <> '') THEN 'one' ELSE 'neither' END AS contact_status, COUNT(*) AS place_count FROM places GROUP BY contact_status ORDER BY CASE contact_status WHEN 'both' THEN 1 WHEN 'one' THEN 2 ELSE 3 END",
+      "difficulty": "hard",
+      "evaluation_group": "aggregate_topk",
+      "expected_query_shape": "conditional_aggregation",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "aggregate_topk",
+        "hard"
+      ],
+      "fake_sql": "SELECT CASE WHEN website IS NOT NULL AND TRIM(website) <> '' AND tel IS NOT NULL AND TRIM(tel) <> '' THEN 'both' WHEN (website IS NOT NULL AND TRIM(website) <> '') OR (tel IS NOT NULL AND TRIM(tel) <> '') THEN 'one' ELSE 'neither' END AS contact_status, COUNT(*) AS place_count FROM places GROUP BY contact_status ORDER BY CASE contact_status WHEN 'both' THEN 1 WHEN 'one' THEN 2 ELSE 3 END",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_a08",
+      "question": "最近更新的十个地点有哪些？如果日期相同，按名称排列。",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "name",
+          "date_refreshed"
+        ],
+        "rows": [
+          [
+            "13De Marzo Café",
+            "2026-07-08"
+          ],
+          [
+            "18-19号站台",
+            "2026-07-08"
+          ],
+          [
+            "AMAM Lonbakery Town",
+            "2026-07-08"
+          ],
+          [
+            "APOLI ITA BAKERY",
+            "2026-07-08"
+          ],
+          [
+            "Amam Lonbakery Town",
+            "2026-07-08"
+          ],
+          [
+            "Arch Walk Mall (金虹桥商场)",
+            "2026-07-08"
+          ],
+          [
+            "BURBERRY",
+            "2026-07-08"
+          ],
+          [
+            "Baker & Spice",
+            "2026-07-08"
+          ],
+          [
+            "Baker & Spice",
+            "2026-07-08"
+          ],
+          [
+            "Beiqiao",
+            "2026-07-08"
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT name, date_refreshed FROM places WHERE date_refreshed IS NOT NULL ORDER BY date_refreshed DESC, name ASC, fsq_place_id ASC LIMIT 10",
+      "difficulty": "easy",
+      "evaluation_group": "aggregate_topk",
+      "expected_query_shape": "ordered_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "aggregate_topk",
+        "easy"
+      ],
+      "fake_sql": "SELECT name, date_refreshed FROM places WHERE date_refreshed IS NOT NULL ORDER BY date_refreshed DESC, name ASC, fsq_place_id ASC LIMIT 10",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_c01",
+      "question": "上海最常见的十种地点类型是什么？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "category_name",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Chinese Restaurant",
+            6715
+          ],
+          [
+            "Office",
+            3335
+          ],
+          [
+            "Coffee Shop",
+            3290
+          ],
+          [
+            "Japanese Restaurant",
+            2758
+          ],
+          [
+            "Café",
+            2741
+          ],
+          [
+            "Hotel",
+            2318
+          ],
+          [
+            "Apartment or Condo",
+            1861
+          ],
+          [
+            "Noodle Restaurant",
+            1797
+          ],
+          [
+            "Fast Food Restaurant",
+            1609
+          ],
+          [
+            "Asian Restaurant",
+            1554
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT c.category_name, COUNT(DISTINCT p.fsq_place_id) AS place_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 10",
+      "difficulty": "medium",
+      "evaluation_group": "category_join",
+      "expected_query_shape": "three_table_grouped_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places",
+        "place_categories",
+        "categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "category_join",
+        "medium"
+      ],
+      "fake_sql": "SELECT c.category_name, COUNT(DISTINCT p.fsq_place_id) AS place_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 10",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_c02",
+      "question": "浦东最常见的五种地点类型有哪些？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "category_name",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Chinese Restaurant",
+            1023
+          ],
+          [
+            "Office",
+            560
+          ],
+          [
+            "Hotel",
+            506
+          ],
+          [
+            "Coffee Shop",
+            464
+          ],
+          [
+            "Plane",
+            414
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT c.category_name, COUNT(DISTINCT p.fsq_place_id) AS place_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district = 'Pudong' GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 5",
+      "difficulty": "medium",
+      "evaluation_group": "category_join",
+      "expected_query_shape": "district_category_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": "行政区口径仅包含 canonical_district 非空记录；当前映射覆盖率为 50.5546%。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places",
+        "place_categories",
+        "categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "category_join",
+        "medium"
+      ],
+      "fake_sql": "SELECT c.category_name, COUNT(DISTINCT p.fsq_place_id) AS place_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district = 'Pudong' GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 5",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_c03",
+      "question": "徐汇最常见的五种地点类型有哪些？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "category_name",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Chinese Restaurant",
+            659
+          ],
+          [
+            "Office",
+            450
+          ],
+          [
+            "Café",
+            314
+          ],
+          [
+            "Coffee Shop",
+            282
+          ],
+          [
+            "Japanese Restaurant",
+            226
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT c.category_name, COUNT(DISTINCT p.fsq_place_id) AS place_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district = 'Xuhui' GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 5",
+      "difficulty": "medium",
+      "evaluation_group": "category_join",
+      "expected_query_shape": "district_category_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": "行政区口径仅包含 canonical_district 非空记录；当前映射覆盖率为 50.5546%。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places",
+        "place_categories",
+        "categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "category_join",
+        "medium"
+      ],
+      "fake_sql": "SELECT c.category_name, COUNT(DISTINCT p.fsq_place_id) AS place_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district = 'Xuhui' GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 5",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_c04",
+      "question": "被标注为多种类型的地点一共有多少个？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "multi_category_place_count"
+        ],
+        "rows": [
+          [
+            9415
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT COUNT(*) AS multi_category_place_count FROM (SELECT fsq_place_id FROM place_categories GROUP BY fsq_place_id HAVING COUNT(*) > 1)",
+      "difficulty": "medium",
+      "evaluation_group": "category_join",
+      "expected_query_shape": "grouped_subquery_count",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "place_categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "category_join",
+        "medium"
+      ],
+      "fake_sql": "SELECT COUNT(*) AS multi_category_place_count FROM (SELECT fsq_place_id FROM place_categories GROUP BY fsq_place_id HAVING COUNT(*) > 1)",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_c05",
+      "question": "哪些地点类型最常和其他类型一起出现？列出前十种。",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "category_name",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Fast Food Restaurant",
+            1337
+          ],
+          [
+            "Chinese Restaurant",
+            1042
+          ],
+          [
+            "Café",
+            898
+          ],
+          [
+            "Burger Joint",
+            522
+          ],
+          [
+            "Coffee Shop",
+            485
+          ],
+          [
+            "Japanese Restaurant",
+            470
+          ],
+          [
+            "Noodle Restaurant",
+            453
+          ],
+          [
+            "Bakery",
+            421
+          ],
+          [
+            "Fried Chicken Joint",
+            356
+          ],
+          [
+            "Office",
+            328
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "WITH multi AS (SELECT fsq_place_id FROM place_categories GROUP BY fsq_place_id HAVING COUNT(*) > 1) SELECT c.category_name, COUNT(DISTINCT pc.fsq_place_id) AS place_count FROM multi m JOIN place_categories pc ON pc.fsq_place_id = m.fsq_place_id JOIN categories c ON c.category_id = pc.category_id GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 10",
+      "difficulty": "hard",
+      "evaluation_group": "category_join",
+      "expected_query_shape": "multi_category_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places",
+        "place_categories",
+        "categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "category_join",
+        "hard"
+      ],
+      "fake_sql": "WITH multi AS (SELECT fsq_place_id FROM place_categories GROUP BY fsq_place_id HAVING COUNT(*) > 1) SELECT c.category_name, COUNT(DISTINCT pc.fsq_place_id) AS place_count FROM multi m JOIN place_categories pc ON pc.fsq_place_id = m.fsq_place_id JOIN categories c ON c.category_id = pc.category_id GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 10",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_c06",
+      "question": "按数据中排在第一位的类型口径，最常见的十种类型是什么？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "category_name",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Chinese Restaurant",
+            6003
+          ],
+          [
+            "Office",
+            3172
+          ],
+          [
+            "Coffee Shop",
+            3050
+          ],
+          [
+            "Japanese Restaurant",
+            2493
+          ],
+          [
+            "Hotel",
+            2287
+          ],
+          [
+            "Café",
+            2180
+          ],
+          [
+            "Apartment or Condo",
+            1836
+          ],
+          [
+            "Noodle Restaurant",
+            1616
+          ],
+          [
+            "Asian Restaurant",
+            1398
+          ],
+          [
+            "Fast Food Restaurant",
+            1304
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT c.category_name, COUNT(DISTINCT pc.fsq_place_id) AS place_count FROM place_categories pc JOIN categories c ON c.category_id = pc.category_id WHERE pc.is_primary = 1 GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 10",
+      "difficulty": "medium",
+      "evaluation_group": "category_join",
+      "expected_query_shape": "inferred_primary_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": "第一项类型来自源数组顺序，仅是推断口径，不代表 FSQ 官方主分类。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places",
+        "place_categories",
+        "categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "category_join",
+        "medium"
+      ],
+      "fake_sql": "SELECT c.category_name, COUNT(DISTINCT pc.fsq_place_id) AS place_count FROM place_categories pc JOIN categories c ON c.category_id = pc.category_id WHERE pc.is_primary = 1 GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 10",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_c07",
+      "question": "餐饮相关类型中，覆盖地点最多的十种是什么？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "category_name",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Chinese Restaurant",
+            6715
+          ],
+          [
+            "Japanese Restaurant",
+            2758
+          ],
+          [
+            "Noodle Restaurant",
+            1797
+          ],
+          [
+            "Fast Food Restaurant",
+            1609
+          ],
+          [
+            "Asian Restaurant",
+            1554
+          ],
+          [
+            "Hotpot Restaurant",
+            1234
+          ],
+          [
+            "Shanghai Restaurant",
+            1187
+          ],
+          [
+            "Restaurant",
+            1106
+          ],
+          [
+            "Cantonese Restaurant",
+            910
+          ],
+          [
+            "Korean Restaurant",
+            836
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT c.category_name, COUNT(DISTINCT pc.fsq_place_id) AS place_count FROM place_categories pc JOIN categories c ON c.category_id = pc.category_id WHERE c.category_name LIKE '%Restaurant%' GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 10",
+      "difficulty": "medium",
+      "evaluation_group": "category_join",
+      "expected_query_shape": "filtered_category_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": "餐饮相关按英文类型名称包含 Restaurant 定义。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places",
+        "place_categories",
+        "categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "category_join",
+        "medium"
+      ],
+      "fake_sql": "SELECT c.category_name, COUNT(DISTINCT pc.fsq_place_id) AS place_count FROM place_categories pc JOIN categories c ON c.category_id = pc.category_id WHERE c.category_name LIKE '%Restaurant%' GROUP BY c.category_id, c.category_name ORDER BY place_count DESC, c.category_name ASC LIMIT 10",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_c08",
+      "question": "酒店和咖啡店分别收录了多少个地点？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "category_name",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Coffee Shop",
+            3290
+          ],
+          [
+            "Hotel",
+            2318
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT c.category_name, COUNT(DISTINCT pc.fsq_place_id) AS place_count FROM place_categories pc JOIN categories c ON c.category_id = pc.category_id WHERE c.category_name IN ('Hotel', 'Coffee Shop') GROUP BY c.category_id, c.category_name ORDER BY c.category_name ASC",
+      "difficulty": "easy",
+      "evaluation_group": "category_join",
+      "expected_query_shape": "selected_category_counts",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places",
+        "place_categories",
+        "categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "category_join",
+        "easy"
+      ],
+      "fake_sql": "SELECT c.category_name, COUNT(DISTINCT pc.fsq_place_id) AS place_count FROM place_categories pc JOIN categories c ON c.category_id = pc.category_id WHERE c.category_name IN ('Hotel', 'Coffee Shop') GROUP BY c.category_id, c.category_name ORDER BY c.category_name ASC",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_d01",
+      "question": "在能够明确识别所属行政区的地点中，哪些区收录的地点最多？请列出前十名。",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "canonical_district",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Pudong",
+            14569
+          ],
+          [
+            "Changning",
+            9284
+          ],
+          [
+            "Xuhui",
+            9054
+          ],
+          [
+            "Huangpu",
+            7229
+          ],
+          [
+            "Jing'an",
+            1705
+          ],
+          [
+            "Minhang",
+            1624
+          ],
+          [
+            "Putuo",
+            782
+          ],
+          [
+            "Hongkou",
+            564
+          ],
+          [
+            "Yangpu",
+            520
+          ],
+          [
+            "Chongming",
+            232
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT canonical_district, COUNT(*) AS place_count FROM places WHERE canonical_district IS NOT NULL GROUP BY canonical_district ORDER BY place_count DESC, canonical_district ASC LIMIT 10",
+      "difficulty": "medium",
+      "evaluation_group": "district",
+      "expected_query_shape": "district_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": "行政区口径仅包含 canonical_district 非空记录；当前映射覆盖率为 50.5546%。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "district",
+        "medium"
+      ],
+      "fake_sql": "SELECT canonical_district, COUNT(*) AS place_count FROM places WHERE canonical_district IS NOT NULL GROUP BY canonical_district ORDER BY place_count DESC, canonical_district ASC LIMIT 10",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_d02",
+      "question": "在能够明确识别所属行政区的地点中，留有联系电话的地点主要集中在哪五个区？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "canonical_district",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "Pudong",
+            2677
+          ],
+          [
+            "Xuhui",
+            2309
+          ],
+          [
+            "Changning",
+            2070
+          ],
+          [
+            "Huangpu",
+            2040
+          ],
+          [
+            "Jing'an",
+            688
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT canonical_district, COUNT(*) AS place_count FROM places WHERE canonical_district IS NOT NULL AND tel IS NOT NULL AND TRIM(tel) <> '' GROUP BY canonical_district ORDER BY place_count DESC, canonical_district ASC LIMIT 5",
+      "difficulty": "medium",
+      "evaluation_group": "district",
+      "expected_query_shape": "district_filtered_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": "行政区口径仅包含 canonical_district 非空记录；当前映射覆盖率为 50.5546%。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "district",
+        "medium"
+      ],
+      "fake_sql": "SELECT canonical_district, COUNT(*) AS place_count FROM places WHERE canonical_district IS NOT NULL AND tel IS NOT NULL AND TRIM(tel) <> '' GROUP BY canonical_district ORDER BY place_count DESC, canonical_district ASC LIMIT 5",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_d03",
+      "question": "在能够明确识别所属行政区的地点中，哪个区的咖啡店最多？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "canonical_district",
+          "coffee_shop_count"
+        ],
+        "rows": [
+          [
+            "Pudong",
+            464
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT p.canonical_district, COUNT(DISTINCT p.fsq_place_id) AS coffee_shop_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district IS NOT NULL AND c.category_name = 'Coffee Shop' GROUP BY p.canonical_district ORDER BY coffee_shop_count DESC, p.canonical_district ASC LIMIT 1",
+      "difficulty": "hard",
+      "evaluation_group": "district",
+      "expected_query_shape": "district_category_top_one",
+      "comparison_mode": "ordered_result",
+      "notes": "行政区口径仅包含 canonical_district 非空记录；当前映射覆盖率为 50.5546%。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places",
+        "place_categories",
+        "categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "district",
+        "hard"
+      ],
+      "fake_sql": "SELECT p.canonical_district, COUNT(DISTINCT p.fsq_place_id) AS coffee_shop_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district IS NOT NULL AND c.category_name = 'Coffee Shop' GROUP BY p.canonical_district ORDER BY coffee_shop_count DESC, p.canonical_district ASC LIMIT 1",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_d04",
+      "question": "在能够明确识别所属行政区的地点中，酒店最多的五个区是哪些？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "canonical_district",
+          "hotel_count"
+        ],
+        "rows": [
+          [
+            "Pudong",
+            506
+          ],
+          [
+            "Xuhui",
+            157
+          ],
+          [
+            "Changning",
+            155
+          ],
+          [
+            "Huangpu",
+            152
+          ],
+          [
+            "Minhang",
+            42
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT p.canonical_district, COUNT(DISTINCT p.fsq_place_id) AS hotel_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district IS NOT NULL AND c.category_name = 'Hotel' GROUP BY p.canonical_district ORDER BY hotel_count DESC, p.canonical_district ASC LIMIT 5",
+      "difficulty": "hard",
+      "evaluation_group": "district",
+      "expected_query_shape": "district_category_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": "行政区口径仅包含 canonical_district 非空记录；当前映射覆盖率为 50.5546%。",
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places",
+        "place_categories",
+        "categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "district",
+        "hard"
+      ],
+      "fake_sql": "SELECT p.canonical_district, COUNT(DISTINCT p.fsq_place_id) AS hotel_count FROM places p JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id JOIN categories c ON c.category_id = pc.category_id WHERE p.canonical_district IS NOT NULL AND c.category_name = 'Hotel' GROUP BY p.canonical_district ORDER BY hotel_count DESC, p.canonical_district ASC LIMIT 5",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_q01",
+      "question": "有多少地点还没有被标注任何分类？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "uncategorized_place_count"
+        ],
+        "rows": [
+          [
+            4615
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT COUNT(*) AS uncategorized_place_count FROM places p LEFT JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id WHERE pc.fsq_place_id IS NULL",
+      "difficulty": "medium",
+      "evaluation_group": "quality",
+      "expected_query_shape": "anti_join_count",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places",
+        "place_categories"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "quality",
+        "medium"
+      ],
+      "fake_sql": "SELECT COUNT(*) AS uncategorized_place_count FROM places p LEFT JOIN place_categories pc ON pc.fsq_place_id = p.fsq_place_id WHERE pc.fsq_place_id IS NULL",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_q02",
+      "question": "各类数据质量标记分别影响了多少个地点？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "flag",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "duplicate",
+            391
+          ],
+          [
+            "closed",
+            88
+          ],
+          [
+            "doesnt_exist",
+            3
+          ],
+          [
+            "privatevenue",
+            2
+          ],
+          [
+            "inappropriate",
+            1
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT flag, COUNT(DISTINCT fsq_place_id) AS place_count FROM place_unresolved_flags GROUP BY flag ORDER BY place_count DESC, flag ASC",
+      "difficulty": "medium",
+      "evaluation_group": "quality",
+      "expected_query_shape": "quality_flag_counts",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "place_unresolved_flags"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "quality",
+        "medium"
+      ],
+      "fake_sql": "SELECT flag, COUNT(DISTINCT fsq_place_id) AS place_count FROM place_unresolved_flags GROUP BY flag ORDER BY place_count DESC, flag ASC",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_q03",
+      "question": "最近一次刷新发生在哪一天，当天更新了多少个地点？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "date_refreshed",
+          "place_count"
+        ],
+        "rows": [
+          [
+            "2026-07-08",
+            280
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT date_refreshed, COUNT(*) AS place_count FROM places WHERE date_refreshed = (SELECT MAX(date_refreshed) FROM places) GROUP BY date_refreshed",
+      "difficulty": "medium",
+      "evaluation_group": "quality",
+      "expected_query_shape": "latest_date_count",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "quality",
+        "medium"
+      ],
+      "fake_sql": "SELECT date_refreshed, COUNT(*) AS place_count FROM places WHERE date_refreshed = (SELECT MAX(date_refreshed) FROM places) GROUP BY date_refreshed",
+      "fake_responses": null
+    },
+    {
+      "id": "fsq_q04",
+      "question": "已关闭地点中，最近关闭的十个地点有哪些？",
+      "database_id": "shanghai_places",
+      "expected_result": {
+        "columns": [
+          "name",
+          "date_closed"
+        ],
+        "rows": [
+          [
+            "Delta Sky Club",
+            "2026-07-07"
+          ],
+          [
+            "Wagas",
+            "2026-07-05"
+          ],
+          [
+            "Audemars Piguet",
+            "2026-06-28"
+          ],
+          [
+            "Audemars Piguet Royal Lounge Shop",
+            "2026-06-28"
+          ],
+          [
+            "De Kroon / VIP Lounge Netherlands Pavilion",
+            "2026-06-22"
+          ],
+          [
+            "Bi Feng Tang",
+            "2026-06-20"
+          ],
+          [
+            "Zhabei Stadium",
+            "2026-06-20"
+          ],
+          [
+            "Nar Café & Catering",
+            "2026-06-18"
+          ],
+          [
+            "水舞馔",
+            "2026-06-14"
+          ],
+          [
+            "Shanghai Natural History Museum",
+            "2026-06-06"
+          ]
+        ],
+        "ordered": true,
+        "numeric_tolerance": 1e-6,
+        "strict_columns": false
+      },
+      "gold_sql": "SELECT name, date_closed FROM places WHERE date_closed IS NOT NULL ORDER BY date_closed DESC, name ASC, fsq_place_id ASC LIMIT 10",
+      "difficulty": "easy",
+      "evaluation_group": "quality",
+      "expected_query_shape": "filtered_ordered_top_k",
+      "comparison_mode": "ordered_result",
+      "notes": null,
+      "expected_refusal": false,
+      "expected_unsafe_sql": false,
+      "required_tables": [
+        "places"
+      ],
+      "required_tools": [
+        "inspect_schema",
+        "execute_sql"
+      ],
+      "expected_tool_sequences": [
+        [
+          "inspect_schema",
+          "execute_sql"
+        ]
+      ],
+      "tags": [
+        "quality",
+        "easy"
+      ],
+      "fake_sql": "SELECT name, date_closed FROM places WHERE date_closed IS NOT NULL ORDER BY date_closed DESC, name ASC, fsq_place_id ASC LIMIT 10",
+      "fake_responses": null
+    }
+  ]
+}

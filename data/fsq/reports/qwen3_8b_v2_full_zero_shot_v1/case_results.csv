@@ -1,0 +1,191 @@
+﻿case_id,dataset_name,agent_mode,tags,protocol_completed,execution_success,answer_grounded,result_correct,failure_kind,termination_reason,first_execution_success,repair_succeeded,total_llm_turns,total_tool_calls,total_sql_executions,invalid_tool_calls,repeated_tool_calls,unsafe_sql_count,total_duration_ms,final_sql,final_answer,actual_tool_sequence,error_message
+fsq_s04,fsq_shanghai_business_v2,function-calling,"[""single_table"", ""easy""]",True,True,True,True,,completed,False,True,4,3,2,0,0,0,2134.5164626836777,SELECT COUNT(*) FROM places WHERE date_closed IS NOT NULL;,目前记录为已经关闭的地点共有5522个。,"[""execute_sql"", ""inspect_schema"", ""execute_sql""]",
+fsq_a05,fsq_shanghai_business_v2,function-calling,"[""aggregate_topk"", ""medium""]",True,True,True,True,,completed,True,,4,3,1,0,0,0,4159.003496170044,"SELECT strftime('%Y', date_refreshed) AS year, COUNT(*) AS count FROM places GROUP BY year ORDER BY count DESC LIMIT 5;",按最近更新时间看，记录量最多的五个年份是：2025年（15009条记录）、2019年（14740条记录）、2026年（13663条记录）、2018年（11626条记录）和2017年（7809条记录）。,"[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_c05,fsq_shanghai_business_v2,function-calling,"[""category_join"", ""hard""]",True,True,True,False,semantic_mismatch,completed,True,,4,3,1,0,0,0,6028.453633189201,"SELECT categories.category_name, COUNT(DISTINCT place_categories.fsq_place_id) AS place_count FROM place_categories JOIN categories ON place_categories.category_id = categories.category_id GROUP BY categories.category_name ORDER BY place_count DESC LIMIT 10;","在同时标注了多种类型的地点中，涉及的地点类型按数量列出前十种如下：
+
+1. Chinese Restaurant - 6715
+2. Office - 3335
+3. Coffee Shop - 3290
+4. Japanese Restaurant - 2758
+5. Café - 2741
+6. Hotel - 2318
+7. Apartment or Condo - 1861
+8. Noodle Restaurant - 1797
+9. Fast Food Restaurant - 1609
+10. Asian Restaurant - 1554","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_c04,fsq_shanghai_business_v2,function-calling,"[""category_join"", ""medium""]",True,True,True,,,completed,True,,4,3,1,0,0,0,3824.1679668426514,SELECT COUNT(DISTINCT places.fsq_place_id) FROM places JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id GROUP BY places.fsq_place_id HAVING COUNT(DISTINCT place_categories.category_id) > 1;,被标注为多种类型的地点一共有100个。,"[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_s06,fsq_shanghai_business_v2,function-calling,"[""single_table"", ""easy""]",True,True,True,True,,completed,True,,3,2,1,0,0,0,2375.9983479976654,"SELECT MAX(date_refreshed) AS latest_update_date, COUNT(*) AS updated_places_count FROM places WHERE date_refreshed IS NOT NULL AND date_refreshed = (SELECT MAX(date_refreshed) FROM places);",数据库中最近一次地点更新时间是2026-07-08，这一天共有280个地点被更新。,"[""inspect_schema"", ""execute_sql""]",
+fsq_s01,fsq_shanghai_business_v2,function-calling,"[""single_table"", ""easy""]",True,True,True,True,,completed,True,,2,1,1,0,0,0,871.0357248783112,SELECT COUNT(*) AS total_places FROM places;,上海地点库一共收录了91770个地点。,"[""execute_sql""]",
+fsq_a02,fsq_shanghai_business_v2,function-calling,"[""aggregate_topk"", ""medium""]",True,True,True,True,,completed,True,,4,3,1,0,0,0,5383.484125137329,"SELECT name, COUNT(*) as count FROM places GROUP BY name ORDER BY count DESC LIMIT 10;","重名地点最多的十个名称及其出现次数如下：
+
+1. 星巴克 - 518个
+2. FamilyMart 全家 - 310个
+3. McDonald's (麦当劳) - 252个
+4. Starbucks (星巴克) - 233个
+5. Manner Coffee - 203个
+6. LAWSON 罗森 - 202个
+7. Industrial and Commercial Bank of China (ICBC) 中国工商银行 - 164个
+8. KFC (肯德基) - 150个
+9. 85°C Bakery Café (85度C) - 119个
+10. Costa Coffee 咖世家 - 103个","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_q01,fsq_shanghai_business_v2,function-calling,"[""quality"", ""medium""]",True,True,True,True,,completed,True,,2,1,1,0,0,0,1328.3152729272842,SELECT COUNT(*) FROM places LEFT JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id WHERE place_categories.category_id IS NULL;,共有 4615 个地点尚未被标注任何分类。,"[""execute_sql""]",
+fsq_q04,fsq_shanghai_business_v2,function-calling,"[""quality"", ""easy""]",True,True,True,False,semantic_mismatch,completed,True,,4,3,1,0,0,0,6105.432361364365,"SELECT name, date_closed FROM places WHERE date_closed IS NOT NULL ORDER BY date_closed DESC LIMIT 10;","最近关闭的十个地点如下：
+
+1. Delta Sky Club - 2026-07-07
+2. Wagas - 2026-07-05
+3. Audemars Piguet Royal Lounge Shop - 2026-06-28
+4. Audemars Piguet - 2026-06-28
+5. De Kroon / VIP Lounge Netherlands Pavilion - 2026-06-22
+6. Zhabei Stadium - 2026-06-20
+7. Bi Feng Tang - 2026-06-20
+8. Nar Café & Catering - 2026-06-18
+9. 水舞馔 - 2026-06-14
+10. Shanghai Natural History Museum - 2026-06-06","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_c01,fsq_shanghai_business_v2,function-calling,"[""category_join"", ""medium""]",True,True,True,True,,completed,True,,4,3,1,0,0,0,6844.359740614891,"SELECT categories.category_name, COUNT(DISTINCT place_categories.fsq_place_id) as place_count FROM places JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id JOIN categories ON place_categories.category_id = categories.category_id GROUP BY categories.category_name ORDER BY place_count DESC LIMIT 10;","上海最常见的十种地点类型如下：
+
+1. **Chinese Restaurant** - 6715
+2. **Office** - 3335
+3. **Coffee Shop** - 3290
+4. **Japanese Restaurant** - 2758
+5. **Café** - 2741
+6. **Hotel** - 2318
+7. **Apartment or Condo** - 1861
+8. **Noodle Restaurant** - 1797
+9. **Fast Food Restaurant** - 1609
+10. **Asian Restaurant** - 1554","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_c07,fsq_shanghai_business_v2,function-calling,"[""category_join"", ""medium""]",False,True,False,True,max_steps,max_steps_reached,True,,5,5,1,0,0,0,5302.801489830017,"SELECT categories.category_name, COUNT(DISTINCT places.fsq_place_id) AS place_count FROM places JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id JOIN categories ON place_categories.category_id = categories.category_id WHERE categories.category_name LIKE '%Restaurant%' GROUP BY categories.category_name ORDER BY place_count DESC LIMIT 10;",,"[""inspect_schema"", ""inspect_schema"", ""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_d04,fsq_shanghai_business_v2,function-calling,"[""district"", ""hard""]",True,True,True,True,,completed,True,,4,3,1,0,0,0,6697.333782911301,"SELECT canonical_district, COUNT(DISTINCT places.fsq_place_id) as hotel_count
+FROM places
+JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id
+JOIN categories ON place_categories.category_id = categories.category_id
+WHERE categories.category_name = 'Hotel'
+AND places.canonical_district IS NOT NULL
+GROUP BY canonical_district
+ORDER BY hotel_count DESC
+LIMIT 5;","在能够明确识别所属行政区的地点中，酒店最多的五个区是：
+
+1. **浦东新区 (Pudong)** - 506家
+2. **徐汇区 (Xuhui)** - 157家
+3. **长宁区 (Changning)** - 155家
+4. **黄浦区 (Huangpu)** - 152家
+5. **闵行区 (Minhang)** - 42家","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_c08,fsq_shanghai_business_v2,function-calling,"[""category_join"", ""easy""]",True,True,True,False,semantic_mismatch,completed,True,,4,3,1,0,0,0,5265.965595841408,"SELECT COUNT(DISTINCT CASE WHEN categories.category_name = 'Hotel' THEN places.fsq_place_id END) AS hotel_count, COUNT(DISTINCT CASE WHEN categories.category_name = 'Coffee Shop' THEN places.fsq_place_id END) AS coffee_shop_count FROM places JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id JOIN categories ON place_categories.category_id = categories.category_id;",酒店收录了2318个地点，咖啡店收录了3290个地点。,"[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_s03,fsq_shanghai_business_v2,function-calling,"[""single_table"", ""easy""]",True,True,True,True,,completed,False,True,4,3,2,0,0,0,2213.671863079071,SELECT COUNT(*) FROM places WHERE tel IS NOT NULL AND tel != '';,留下联系电话的地点共有18139家。,"[""execute_sql"", ""inspect_schema"", ""execute_sql""]",
+fsq_c06,fsq_shanghai_business_v2,function-calling,"[""category_join"", ""medium""]",False,True,False,False,semantic_mismatch,max_steps_reached,True,,5,5,1,0,0,0,4981.001183390617,"SELECT categories.category_name, COUNT(DISTINCT place_categories.fsq_place_id) as count FROM places JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id JOIN categories ON place_categories.category_id = categories.category_id GROUP BY categories.category_name ORDER BY count DESC LIMIT 10;",,"[""inspect_schema"", ""inspect_schema"", ""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_s05,fsq_shanghai_business_v2,function-calling,"[""single_table"", ""medium""]",True,True,True,False,semantic_mismatch,completed,True,,4,3,1,0,0,0,4754.484936594963,"SELECT MAX(longitude) AS max_longitude, MIN(longitude) AS min_longitude, MAX(latitude) AS max_latitude, MIN(latitude) AS min_latitude FROM places;","根据查询结果，这些地点覆盖的最西、最东、最南和最北坐标分别是：
+
+- 最西坐标（最小经度）：120.895815
+- 最东坐标（最大经度）：121.977995
+- 最南坐标（最小纬度）：30.696284
+- 最北坐标（最大纬度）：31.89192933242098","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_d02,fsq_shanghai_business_v2,function-calling,"[""district"", ""medium""]",True,True,True,False,semantic_mismatch,completed,True,,4,3,1,0,0,0,6634.642243385315,"SELECT canonical_district, COUNT(DISTINCT places.fsq_place_id) AS place_count
+FROM places
+JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id
+JOIN categories ON place_categories.category_id = categories.category_id
+WHERE places.canonical_district IS NOT NULL
+AND places.tel IS NOT NULL
+GROUP BY canonical_district
+ORDER BY place_count DESC
+LIMIT 5;","在能够明确识别所属行政区的地点中，留有联系电话的地点主要集中于以下五个区：
+
+1. **浦东新区** - 2620个地点
+2. **徐汇区** - 2250个地点
+3. **长宁区** - 2009个地点
+4. **黄浦区** - 1986个地点
+5. **静安区** - 680个地点","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_a01,fsq_shanghai_business_v2,function-calling,"[""aggregate_topk"", ""medium""]",True,True,True,False,semantic_mismatch,completed,True,,4,3,1,0,0,0,4996.386215090752,"SELECT locality, COUNT(*) as count FROM places WHERE canonical_district IS NULL AND locality IS NOT NULL GROUP BY locality ORDER BY count DESC LIMIT 10;","原始城市或区县标注中，出现次数最多的十个名称（省级区域标注不计入）如下：
+
+1. Shanghai - 43110
+2. 上海市 - 449
+3. shanghai - 380
+4. 上海 - 240
+5. Shanghai, Shanghai Shi - 66
+6. Shanghai, China - 47
+7. 上海市 | Shanghai - 36
+8. SHANGHAI - 34
+9. Zhabei - 27
+10. Chongming Island - 22","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_a06,fsq_shanghai_business_v2,function-calling,"[""aggregate_topk"", ""medium""]",True,True,True,False,semantic_mismatch,completed,True,,4,3,1,0,0,0,4454.496935009956,"SELECT strftime('%Y', date_closed) AS closed_year, COUNT(*) AS closed_count FROM places WHERE date_closed IS NOT NULL GROUP BY closed_year ORDER BY closed_year DESC LIMIT 5;","已经关闭的地点主要集中于以下五个关闭年份：
+
+1. 2025年：2241个地点
+2. 2024年：260个地点
+3. 2026年：374个地点
+4. 2023年：95个地点
+5. 2022年：190个地点","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_d01,fsq_shanghai_business_v2,function-calling,"[""district"", ""medium""]",True,True,True,True,,completed,True,,4,3,1,0,0,0,5735.198110342026,"SELECT canonical_district, COUNT(*) as count FROM places WHERE canonical_district IS NOT NULL GROUP BY canonical_district ORDER BY count DESC LIMIT 10;","在能够明确识别所属行政区的地点中，收录地点最多的前十名行政区如下：
+
+1. **Pudong** - 14569个地点
+2. **Changning** - 9284个地点
+3. **Xuhui** - 9054个地点
+4. **Huangpu** - 7229个地点
+5. **Jing'an** - 1705个地点
+6. **Minhang** - 1624个地点
+7. **Putuo** - 782个地点
+8. **Hongkou** - 564个地点
+9. **Yangpu** - 520个地点
+10. **Chongming** - 232个地点","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_a04,fsq_shanghai_business_v2,function-calling,"[""aggregate_topk"", ""medium""]",True,True,True,True,,completed,True,,4,3,1,0,0,0,4521.407350897789,"SELECT strftime('%Y', date_created) AS creation_year, COUNT(*) AS place_count FROM places GROUP BY creation_year ORDER BY place_count DESC LIMIT 5;","按创建年份看，新增地点最多的五年分别是：
+
+1. 2012年：12,077个地点
+2. 2011年：11,696个地点
+3. 2013年：9,817个地点
+4. 2010年：8,756个地点
+5. 2016年：5,777个地点","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_q03,fsq_shanghai_business_v2,function-calling,"[""quality"", ""medium""]",True,True,True,True,,completed,True,,3,2,1,0,0,0,2235.0381910800934,"SELECT date_refreshed, COUNT(DISTINCT fsq_place_id) as place_count FROM places GROUP BY date_refreshed ORDER BY date_refreshed DESC LIMIT 1;",最近一次刷新发生在 **2026-07-08**，当天更新了 **280** 个地点。,"[""inspect_schema"", ""execute_sql""]",
+fsq_c02,fsq_shanghai_business_v2,function-calling,"[""category_join"", ""medium""]",True,True,True,False,semantic_mismatch,completed,True,,4,3,1,0,0,0,5327.872321009636,"SELECT categories.category_name, COUNT(DISTINCT places.fsq_place_id) as place_count
+FROM places
+JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id
+JOIN categories ON place_categories.category_id = categories.category_id
+WHERE places.canonical_district = '浦东'
+GROUP BY categories.category_name
+ORDER BY place_count DESC
+LIMIT 5;",根据现有数据，浦东最常见的五种地点类型没有返回任何结果。这可能意味着在浦东地区没有足够的数据或某些数据未被正确分类。建议检查数据源或进一步细化查询条件。,"[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_c03,fsq_shanghai_business_v2,function-calling,"[""category_join"", ""medium""]",True,True,True,False,semantic_mismatch,completed,True,,4,3,1,0,0,0,4806.83408677578,"SELECT categories.category_name, COUNT(DISTINCT places.fsq_place_id) as place_count
+FROM places
+JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id
+JOIN categories ON place_categories.category_id = categories.category_id
+WHERE places.canonical_district = '徐汇'
+GROUP BY categories.category_name
+ORDER BY place_count DESC
+LIMIT 5;",徐汇最常见的五种地点类型没有找到相关数据。,"[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_a03,fsq_shanghai_business_v2,function-calling,"[""aggregate_topk"", ""medium""]",True,True,True,False,semantic_mismatch,completed,True,,4,3,1,0,0,0,5411.896631121635,"SELECT postcode, COUNT(*) as place_count FROM places GROUP BY postcode ORDER BY place_count DESC LIMIT 10;","根据查询结果，地点最集中的十个邮政编码如下：
+
+1. 无邮政编码：60715处
+2. 200000：18477处
+3. 200120：982处
+4. 200030：763处
+5. 200031：682处
+6. 200051：638处
+7. 200040：586处
+8. 200021：486处
+9. 200085：478处
+10. 200025：385处","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_s02,fsq_shanghai_business_v2,function-calling,"[""single_table"", ""easy""]",True,True,True,True,,completed,True,,4,3,1,0,0,0,2243.259370326996,SELECT COUNT(*) FROM places WHERE website IS NOT NULL AND website != '';,"有官方网站的地点共有10,451家。","[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_a08,fsq_shanghai_business_v2,function-calling,"[""aggregate_topk"", ""easy""]",True,True,True,True,,completed,False,True,4,3,2,0,0,0,6336.844578385353,"SELECT places.name, places.date_refreshed FROM places ORDER BY places.date_refreshed DESC, places.name ASC LIMIT 10","最近更新的十个地点如下：
+
+1. 13De Marzo Café - 2026-07-08
+2. 18-19号站台 - 2026-07-08
+3. AMAM Lonbakery Town - 2026-07-08
+4. APOLI ITA BAKERY - 2026-07-08
+5. Amam Lonbakery Town - 2026-07-08
+6. Arch Walk Mall (金虹桥商场) - 2026-07-08
+7. BURBERRY - 2026-07-08
+8. Baker & Spice - 2026-07-08
+9. Baker & Spice - 2026-07-08
+10. Beiqiao - 2026-07-08","[""execute_sql"", ""inspect_schema"", ""execute_sql""]",
+fsq_d03,fsq_shanghai_business_v2,function-calling,"[""district"", ""hard""]",True,True,True,True,,completed,True,,4,3,1,0,0,0,5470.636695623398,"SELECT canonical_district, COUNT(DISTINCT places.fsq_place_id) AS coffee_shop_count
+FROM places
+JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id
+JOIN categories ON place_categories.category_id = categories.category_id
+WHERE categories.category_name = 'Coffee Shop' AND places.canonical_district IS NOT NULL
+GROUP BY canonical_district
+ORDER BY coffee_shop_count DESC
+LIMIT 1;",在能够明确识别所属行政区的地点中，**Pudong** 区的咖啡店最多，共有 **464 家**。,"[""inspect_schema"", ""validate_sql"", ""execute_sql""]",
+fsq_a07,fsq_shanghai_business_v2,function-calling,"[""aggregate_topk"", ""hard""]",False,True,False,False,semantic_mismatch,max_steps_reached,True,,5,5,2,0,0,0,3601.511061191559,SELECT COUNT(*) AS only_website FROM places WHERE website IS NOT NULL AND tel IS NULL;,,"[""inspect_schema"", ""validate_sql"", ""execute_sql"", ""validate_sql"", ""execute_sql""]",
+fsq_q02,fsq_shanghai_business_v2,function-calling,"[""quality"", ""medium""]",True,True,True,False,semantic_mismatch,completed,True,,5,4,1,0,0,0,4164.388597011566,"SELECT flag, COUNT(DISTINCT fsq_place_id) as place_count FROM place_unresolved_flags GROUP BY flag;","各类数据质量标记影响的地点数量如下：
+
+- **closed**: 88 个地点
+- **doesnt_exist**: 3 个地点
+- **duplicate**: 391 个地点
+- **inappropriate**: 1 个地点
+- **privatevenue**: 2 个地点","[""inspect_schema"", ""inspect_schema"", ""validate_sql"", ""execute_sql""]",
