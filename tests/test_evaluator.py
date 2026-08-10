@@ -9,6 +9,7 @@ from pathlib import Path
 from execsql_agent.evaluation.comparator import compare_execution_result
 from execsql_agent.evaluation.evaluator import Evaluator
 from execsql_agent.evaluation.reports import write_reports
+from execsql_agent.evaluation.rescore import rescore_evaluation_report
 from execsql_agent.evaluation.synthetic import (
     build_scripted_client,
     load_behavior_dataset,
@@ -26,7 +27,10 @@ from execsql_agent.models import (
 
 
 def _execution(
-    rows: list[list[object]], columns: list[str] | None = None
+    rows: list[list[object]],
+    columns: list[str] | None = None,
+    *,
+    truncated: bool = False,
 ) -> ExecutionResult:
     return ExecutionResult(
         executed=True,
@@ -34,6 +38,7 @@ def _execution(
         columns=columns or ["value"],
         rows=rows,
         returned_row_count=len(rows),
+        truncated=truncated,
         duration_ms=0,
     )
 
@@ -91,6 +96,55 @@ def test_relaxed_columns_still_require_position_and_compatible_types() -> None:
 def test_empty_result_is_valid() -> None:
     expected = ExpectedResult(columns=["value"], rows=[])
     assert compare_execution_result(_execution([]), expected) is True
+
+
+def test_truncated_successful_result_is_incorrect() -> None:
+    expected = ExpectedResult(columns=["value"], rows=[[9415]])
+    actual = _execution([[1]] * 100, truncated=True)
+
+    assert compare_execution_result(actual, expected) is False
+
+
+def test_truncated_case_counts_as_semantic_mismatch(demo_db: Path) -> None:
+    case = EvaluationCase(
+        id="truncated_semantic_mismatch",
+        question="How many joined rows are there?",
+        database_id="demo",
+        expected_result=ExpectedResult(columns=["row_count"], rows=[[1000]]),
+        fake_sql=(
+            "SELECT c1.customer_id FROM customers AS c1 "
+            "CROSS JOIN customers AS c2 CROSS JOIN customers AS c3"
+        ),
+    )
+    report = Evaluator(demo_db, build_scripted_client).evaluate(
+        [case], dataset_name="truncation", agent_mode="function-calling"
+    )
+    evaluated = report.cases[0]
+
+    assert evaluated.protocol_completed is True
+    assert evaluated.execution_success is True
+    assert evaluated.answer_grounded is True
+    assert evaluated.actual_result is not None
+    assert evaluated.actual_result.truncated is True
+    assert evaluated.result_correct is False
+    assert evaluated.failure_kind is FailureKind.SEMANTIC_MISMATCH
+    accuracy = report.mode_metrics["function-calling"].result_accuracy
+    assert (accuracy.numerator, accuracy.denominator, accuracy.value) == (0, 1, 0)
+
+    legacy_case = evaluated.model_copy(
+        update={"result_correct": None, "failure_kind": None}
+    )
+    legacy_report = report.model_copy(update={"cases": [legacy_case]})
+    rescored = rescore_evaluation_report(legacy_report)
+    rescored_case = rescored.cases[0]
+    rescored_accuracy = rescored.mode_metrics["function-calling"].result_accuracy
+    assert rescored_case.result_correct is False
+    assert rescored_case.failure_kind is FailureKind.SEMANTIC_MISMATCH
+    assert (
+        rescored_accuracy.numerator,
+        rescored_accuracy.denominator,
+        rescored_accuracy.value,
+    ) == (0, 1, 0)
 
 
 def test_direct_answer_is_not_verifiable(demo_db: Path) -> None:

@@ -97,7 +97,10 @@ class FunctionCallingAgent:
             "complete rows required by the user's question. Do not combine earlier SQL "
             "observations, do not omit required fields, and do not return extra columns "
             "or extra rows. Base the final answer only on the last successful execute_sql "
-            "result. After a successful execute_sql result already completely answers the user question, stop calling tools and provide the final answer; never repeat the same execute_sql call. For Top-K requests, use the exact requested LIMIT in that final SQL; "
+            "result. After a successful execute_sql result already completely answers "
+            "the user question, stop calling tools and provide the final answer; never "
+            "repeat the same execute_sql call. For Top-K requests, use the exact "
+            "requested LIMIT in that final SQL; "
             "never fetch more rows and truncate them only in natural language."
         )
         if self.domain_context:

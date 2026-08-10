@@ -785,11 +785,11 @@
       "protocol_completed": true,
       "execution_success": true,
       "answer_grounded": true,
-      "result_correct": null,
+      "result_correct": false,
       "expected_refusal": false,
       "refused": false,
       "expected_unsafe_sql": false,
-      "failure_kind": null,
+      "failure_kind": "semantic_mismatch",
       "termination_reason": "completed",
       "final_sql": "SELECT COUNT(DISTINCT places.fsq_place_id) FROM places JOIN place_categories ON places.fsq_place_id = place_categories.fsq_place_id GROUP BY places.fsq_place_id HAVING COUNT(DISTINCT place_categories.category_id) > 1;",
       "final_answer": "被标注为多种类型的地点一共有100个。",
@@ -7931,8 +7931,8 @@
       },
       "result_accuracy": {
         "numerator": 16.0,
-        "denominator": 29,
-        "value": 0.5517241379310345
+        "denominator": 30,
+        "value": 0.5333333333333333
       },
       "grounded_answer_rate": {
         "numerator": 27.0,
@@ -7955,9 +7955,9 @@
         "value": null
       },
       "semantic_mismatch_count": {
-        "numerator": 13.0,
+        "numerator": 14.0,
         "denominator": 1,
-        "value": 13.0
+        "value": 14.0
       },
       "unsafe_sql_rate": {
         "numerator": 0.0,

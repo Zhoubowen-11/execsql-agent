@@ -58,10 +58,12 @@ def _unordered_rows_match(
 def compare_execution_result(
     actual: ExecutionResult | None, expected: ExpectedResult
 ) -> bool | None:
-    """Return correctness, or ``None`` when no complete real result is available."""
+    """Return correctness, or ``None`` when no successful real result is available."""
 
-    if actual is None or not actual.execution_success or actual.truncated:
+    if actual is None or not actual.execution_success:
         return None
+    if actual.truncated:
+        return False
     if len(actual.columns) != len(expected.columns):
         return False
     if expected.strict_columns and actual.columns != expected.columns:

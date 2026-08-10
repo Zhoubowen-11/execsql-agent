@@ -20,12 +20,20 @@ from scripts.build_fsq_shanghai_db import (
 )
 
 
+def _require_real_parquet_inputs() -> None:
+    """Skip full-data integration checks when ignored FSQ source files are absent."""
+
+    missing = [path for path in (DEFAULT_PLACES, DEFAULT_CATEGORIES) if not path.is_file()]
+    if missing:
+        missing_list = ", ".join(str(path) for path in missing)
+        pytest.skip(f"requires locally downloaded FSQ Parquet inputs: {missing_list}")
+
+
 @pytest.fixture(scope="session")
 def fsq_database(tmp_path_factory: pytest.TempPathFactory) -> Path:
     """Build the complete 91,770-row database once for the test session."""
 
-    assert DEFAULT_PLACES.is_file()
-    assert DEFAULT_CATEGORIES.is_file()
+    _require_real_parquet_inputs()
     output = tmp_path_factory.mktemp("fsq") / "shanghai_places.db"
     report = build_database(DEFAULT_PLACES, DEFAULT_CATEGORIES, output)
     assert report["database_size_bytes"] == output.stat().st_size
@@ -37,6 +45,7 @@ def _connect_read_only(path: Path) -> sqlite3.Connection:
 
 
 def test_real_parquet_schemas_are_recognized() -> None:
+    _require_real_parquet_inputs()
     places = inspect_parquet(DEFAULT_PLACES, sample_size=1)
     categories = inspect_parquet(DEFAULT_CATEGORIES, sample_size=1)
     place_types = {

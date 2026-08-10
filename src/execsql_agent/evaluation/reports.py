@@ -141,7 +141,7 @@ def write_reports(report: EvaluationReport, output_dir: str | Path) -> dict[str,
         "error_message",
     ]
     with paths["csv"].open("w", encoding="utf-8-sig", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=fieldnames)
+        writer = csv.DictWriter(stream, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for case in report.cases:
             writer.writerow(

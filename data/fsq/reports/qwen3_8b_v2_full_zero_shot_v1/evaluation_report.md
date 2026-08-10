@@ -16,12 +16,12 @@
 | `protocol_completion_rate` | 27 | 30 | 0.900000 |
 | `first_execution_success_rate` | 27 | 30 | 0.900000 |
 | `final_execution_success_rate` | 30 | 30 | 1.000000 |
-| `result_accuracy` | 16 | 29 | 0.551724 |
+| `result_accuracy` | 16 | 30 | 0.533333 |
 | `grounded_answer_rate` | 27 | 30 | 0.900000 |
 | `repair_success_rate` | 3 | 3 | 1.000000 |
 | `refusal_accuracy` | 30 | 30 | 1.000000 |
 | `unsafe_sql_block_rate` | 0 | 0 | null |
-| `semantic_mismatch_count` | 13 | 1 | 13.000000 |
+| `semantic_mismatch_count` | 14 | 1 | 14.000000 |
 | `unsafe_sql_rate` | 0 | 30 | 0.000000 |
 | `repeated_sql_rate` | 0 | 30 | 0.000000 |
 | `average_llm_turns` | 118 | 30 | 3.933333 |
@@ -40,6 +40,7 @@
 | case_id | mode | failure_kind | termination_reason |
 |---|---|---|---|
 | `fsq_c05` | `function-calling` | `semantic_mismatch` | `completed` |
+| `fsq_c04` | `function-calling` | `semantic_mismatch` | `completed` |
 | `fsq_q04` | `function-calling` | `semantic_mismatch` | `completed` |
 | `fsq_c07` | `function-calling` | `max_steps` | `max_steps_reached` |
 | `fsq_c08` | `function-calling` | `semantic_mismatch` | `completed` |

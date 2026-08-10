@@ -19,36 +19,42 @@ dist/
 .env.*
 !.env.example
 
-# Generated databases and run artifacts
+# Generated databases and source-data staging
 data/demo.db
 data/trajectories/*
 data/reports/*
 data/fsq/raw/
 data/fsq/staging/
 data/fsq/shanghai_places.db
+data/fsq/**/*.db
 data/fsq/**/*.duckdb
 data/fsq/**/*.duckdb.wal
 data/fsq/**/*.tmp
 
-# Editors and operating systems
+# Private evaluation data
+data/fsq/eval/questions_holdout*.json
+
+# Large or replaceable post-training intermediates
+data/fsq/train/dpo/
+data/fsq/train/grpo/
+data/fsq/train/counterfactual/
+data/fsq/reports/*smoke*/
+
+# Models, adapters, checkpoints, and logs
+artifacts/
+checkpoints/
+outputs/
+models/
+Qwen3-8B/
+*.safetensors
+logs/
+*.log
+
+# Test, editor, OS, and backup files
+.pytest-tmp/
+pytest_tmp/
 .idea/
 .vscode/
 .DS_Store
 Thumbs.db
-
-# Training artifacts and temporary files
-artifacts/
-checkpoints/
-outputs/
-.pytest-tmp/
-pytest_tmp/
 *.bak
-data/fsq/eval/questions_holdout_v1.json
-*.bak
-data/fsq/eval/questions_holdout_v1.json
-
-# Local backup files
-*.bak
-
-# Private holdout evaluation set
-data/fsq/eval/questions_holdout_v1.json
