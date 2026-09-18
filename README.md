@@ -1,5 +1,7 @@
 # ExecSQL-Agent
 
+[简体中文](README_CN.md)
+
 ExecSQL-Agent is an execution-grounded Text-to-SQL system for SQLite. It turns a natural-language question into a safe, verifiable tool-use trace:
 
 ```text
@@ -99,15 +101,21 @@ Formal reports are under:
 - `data/fsq/reports/qwen3_8b_v2_full_zero_shot_v1/`
 - `data/fsq/reports/qwen3_8b_v2_full_sft_v1/`
 
-## Post-training research experiments
+## GRPO / RLVR diagnostic
 
-DPO, binary-reward GRPO, and Counterfactual Test-Suite GRPO are retained as reproducible negative/ablation experiments. **None passed the predeclared generalization gate, so none is the v1 production or formal checkpoint.**
+The repository includes an execution-based `SQLExecutionVerifier` and a verl adapter for a small, reproducible GRPO diagnostic. Rewards come from real SQLite execution rather than an LLM judge:
 
-- **Binary GRPO:** the execution-verifiable training path worked, but saturated binary rewards produced many zero-variance groups and the generalization gate failed.
-- **DPO:** preferences came from real SFT rollout pairs with a frozen SFT reference. Reward margin and preference accuracy improved, but held-out execution correctness did not; the checkpoint was rejected.
-- **Counterfactual Test-Suite GRPO:** candidate SQL was executed across four programmatic SQLite worlds, with reward equal to the pass ratio. It exposed single-database accidental correctness and improved mean semantic reward in a targeted pilot, but exact-correctness acceptance criteria did not improve; the checkpoint was rejected.
+| Outcome | Reward |
+| --- | ---: |
+| Correct execution result | `1.0` |
+| Safe and executable, but wrong result | `0.2` |
+| Malformed, unsafe, or failed execution | `0.0` |
 
-The counterfactual verifier is still useful engineering: it produces deterministic rewards such as `0.00`, `0.25`, `0.50`, `0.75`, and `1.00` without an LLM judge.
+The DEV diagnostic uses Qwen3-0.6B, vLLM group rollout with `n=4`, and strict JSON completions. One recorded group produced rewards `[1.0, 0.2, 1.0, 0.2]`, sequence advantages `±0.866`, policy loss `-0.07949`, grad norm `17.49`, and a real optimizer step from global step `0` to `1`.
+
+> This validates the end-to-end GRPO training path and a non-zero parameter update. It is not evidence that GRPO improves SQL accuracy or outperforms the Base/SFT checkpoints.
+
+Reproducible assets live in `configs/verl_grpo_sql_diagnostic.yaml`, `scripts/run_verl_grpo_diagnostic.sh`, and `docs/experiments/qwen3_0.6b_grpo_diagnostic.md`.
 
 ## Reproducibility
 
@@ -143,7 +151,7 @@ python -m execsql_agent.cli run \
   --question "在能够明确识别所属行政区的地点中，哪个区的咖啡店最多？"
 ```
 
-OpenAI-compatible serving uses `OPENAI_API_KEY`, `OPENAI_BASE_URL`, and `OPENAI_MODEL`; copy `.env.example` and keep `.env` local. Evaluate with the same protocol:
+OpenAI-compatible serving reads `OPENAI_API_KEY`, `OPENAI_BASE_URL`, and `OPENAI_MODEL` from the process environment. `.env.example` is a reference template; the application does not automatically load a local `.env` file. Evaluate with the same protocol:
 
 ```bash
 python -m execsql_agent.cli evaluate \
@@ -155,13 +163,13 @@ python -m execsql_agent.cli evaluate \
   --real-model
 ```
 
-Training environments and GPU dependencies are intentionally separate from the lightweight project dependencies. Start with `training/assistant_turn_preprocessing.py` and `training/train_qlora_sft_full.py`; post-training entry points are grouped under `training/` and should be treated as research code, not accepted checkpoints.
+Training environments and GPU dependencies are intentionally separate from the lightweight project dependencies. SFT entry points include `training/assistant_turn_preprocessing.py` and `training/train_qlora_sft_full.py`; the reproducible GRPO diagnostic is launched through `scripts/run_verl_grpo_diagnostic.sh`. These are training workflows, not distributed model checkpoints.
 
 ## Project structure
 
 ```text
 src/execsql_agent/    agents, LLM abstraction, tools, trajectories, evaluator
-training/             SFT, DPO, GRPO, and counterfactual verifier pipelines
+training/             SFT plus RLVR dataset, reward, and verl adapter utilities
 scripts/              deterministic database, dataset, and report utilities
 tests/                agent, evaluator, data, training, and reward tests
 config/               domain configuration for FSQ Shanghai
@@ -175,4 +183,4 @@ data/fsq/             documented inputs, evaluation sets, and compact reports
 - District normalization is conservative and leaves ambiguous records unmapped.
 - Executable SQL can still be semantically wrong; execution success is not result correctness.
 - The 30-case result is a focused project evaluation, not a broad Text-to-SQL benchmark claim.
-- Model weights, adapters, secrets, private holdout data, raw rollouts, logs, and generated databases are not distributed through Git.
+- Model weights, adapters, secrets, private holdout data, and large training artifacts are not distributed through Git. Compact DEV smoke databases/parquets and selected trajectories or evaluation reports are intentionally tracked when needed for reproducibility.
