@@ -30,6 +30,13 @@ This deterministic e-commerce database exists only to exercise the GRPO plumbing
 It is not the formal FSQ benchmark and must never be reported as a formal result.
 Dates are ISO-8601 text. Monetary values are stored as SQLite REAL values."""
 
+SMOKE_OUTPUT_CONTRACT = """Output contract: Your entire response must be exactly
+one JSON object on one line. The first character must be { and the last character
+must be }. Never output Markdown fences, the word json outside the object,
+analysis, explanation, or any other text."""
+
+DIAGNOSTIC_SAMPLE_ID = "smoke_sql_008"
+
 
 @dataclass(frozen=True)
 class SmokeCase:
@@ -44,6 +51,7 @@ class SmokeBuildResult:
     database_path: Path
     train_path: Path
     val_path: Path
+    diagnostic_path: Path
     train_count: int
     val_count: int
 
@@ -165,7 +173,7 @@ def build_smoke_samples(
                 messages=build_messages(
                     question=case.question,
                     schema_context=schema.summary_text,
-                    domain_context=SMOKE_DOMAIN_CONTEXT,
+                    domain_context=(f"{SMOKE_DOMAIN_CONTEXT}\n\n{SMOKE_OUTPUT_CONTRACT}"),
                 ),
                 database_metadata=DatabaseMetadata(
                     database_id=schema.database_id,
@@ -185,7 +193,7 @@ def build_smoke_samples(
 
 
 def build_smoke_assets(output_dir: str | Path = DEFAULT_OUTPUT_DIR) -> SmokeBuildResult:
-    """Create one database plus 10 train and 2 validation verl Parquet rows."""
+    """Create the database plus train, validation, and diagnostic Parquet data."""
 
     destination = Path(output_dir)
     destination.mkdir(parents=True, exist_ok=True)
@@ -207,10 +215,19 @@ def build_smoke_assets(output_dir: str | Path = DEFAULT_OUTPUT_DIR) -> SmokeBuil
         destination / "val.parquet",
         split="val",
     )
+    diagnostic_samples = [sample for sample in samples if sample.sample_id == DIAGNOSTIC_SAMPLE_ID]
+    if len(diagnostic_samples) != 1:
+        raise RuntimeError(f"Expected exactly one diagnostic sample: {DIAGNOSTIC_SAMPLE_ID}")
+    diagnostic_path = write_verl_parquet(
+        diagnostic_samples,
+        destination / "diagnostic.parquet",
+        split="diagnostic",
+    )
     return SmokeBuildResult(
         database_path=database_path.resolve(),
         train_path=train_path,
         val_path=val_path,
+        diagnostic_path=diagnostic_path,
         train_count=len(train_samples),
         val_count=len(val_samples),
     )
@@ -231,6 +248,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     print(f"  database: {result.database_path}")
     print(f"  train: {result.train_path} ({result.train_count} rows)")
     print(f"  val: {result.val_path} ({result.val_count} rows)")
+    print(f"  diagnostic: {result.diagnostic_path} (1 row)")
     return 0
 
 
